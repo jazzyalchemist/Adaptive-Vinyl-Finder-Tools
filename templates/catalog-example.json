@@ -1,0 +1,25 @@
+{
+  "schema_version": 2,
+  "source": "https://example.com",
+  "checked_at": null,
+  "currency": null,
+  "coverage": {
+    "complete": false,
+    "scope": "Schema example only"
+  },
+  "products": [
+    {
+      "id": "example",
+      "artist": "Example Artist",
+      "title": "Example Album",
+      "price": null,
+      "available": null,
+      "currency": null,
+      "media": null,
+      "sleeve": null,
+      "url": "https://example.com/products/example",
+      "scores": {},
+      "evidence": {}
+    }
+  ]
+}

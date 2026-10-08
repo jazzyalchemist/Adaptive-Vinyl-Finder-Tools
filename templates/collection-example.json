@@ -1,0 +1,11 @@
+[
+  {
+    "id": "discogs-release-ID-copy-1",
+    "artist": "Example Artist",
+    "title": "Example Album",
+    "cat": "CAT-001",
+    "status": "wanted",
+    "source": "User statement, date",
+    "notes": "Replace example; does not imply ownership"
+  }
+]

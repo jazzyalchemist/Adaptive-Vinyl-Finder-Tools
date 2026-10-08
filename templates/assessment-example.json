@@ -1,0 +1,22 @@
+[
+  {
+    "id": "listing-ID-personal",
+    "record_id": "listing-ID",
+    "snapshot_at": "REPLACE-WITH-UTC-TIMESTAMP",
+    "purpose": "personal exploration",
+    "scores": {
+      "L": null,
+      "G": null,
+      "C": null,
+      "A": null,
+      "R": null,
+      "U": null,
+      "I": null,
+      "V": null,
+      "Q": null
+    },
+    "evidence": [],
+    "confidence": "D",
+    "rationale": "Unknown until assessed"
+  }
+]

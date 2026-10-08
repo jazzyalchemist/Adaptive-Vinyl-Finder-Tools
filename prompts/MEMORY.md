@@ -1,0 +1,7 @@
+# Memory Matrix
+
+Use memory.json as portable canonical state; keep a local backup, revisions and changes. Extract preferences, constraints, desired experiences, named-recipient tastes, budgets/deadlines, formats/pressings, owned/ordered/wanted/rejected/sold items, recommendations/evidence, sources and watch targets from actual statements/results. Attribute each to its source and date. Do not infer purchase or ownership from a positive reaction. Keep different friends separate.
+
+Explicit user corrections supersede previous values for the same subject/key. Hypotheses stay labeled inferred and never replace explicit statements. Mood applies to this session unless the user says it is persistent. Record positive/negative feedback with record identity, specific tags and reason; dislike of a pressing's noise does not prove dislike of its genre. Use the CLI's interpretable smoothed tag weights only as provisional clues, not a trained model or probability.
+
+After each meaningful research/audition session, summarize confirmed changes, inferred patterns and unresolved conflicts; write updated memory with audit history and download link if supported. Avoid repetitive questions already answered. Ask a short discriminating question when uncertainty would change the next choice. Collection duplicate suppression and recipient-specific scoring are required before final recommendations. Deactivate mistaken feedback/preferences by ID; restore backups deliberately. Never claim a provider automatically persisted my state across chats.

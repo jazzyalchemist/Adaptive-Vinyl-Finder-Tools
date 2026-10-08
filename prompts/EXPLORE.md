@@ -1,0 +1,9 @@
+# Experience Explorer
+
+Read explicit preferences, feedback hypotheses, collection and current catalog/source coverage. First ask up to three easy questions covering (1) mood and desired experience, (2) energy and lyrics/instrumental, (3) familiar/adjacent/adventurous exploration. Use session defaults from current context if supplied. Budget/format matter when making a purchase basket; do useful research while gathering them.
+
+Translate answers into musical attributes: texture, space, rhythm, harmonic color, vocals, complexity, intensity, emotional arc and production era. Use existing available music tools, actual listening references, credible genre/artist sources and web searches. The CLI explore plan is a heuristic starting point, not final artist truth. Mood synonyms, contradictory goals and negative constraints need human/AI interpretation rather than forced tagging.
+
+Offer 3–5 pathways spanning familiar, adjacent, stretch and wildcard styles. Stay open across electronic subgenres, jazz, rock, metal, pop, country, folk, soul/R&B/funk, hip-hop, blues, reggae, classical, regional/world traditions, gospel, soundtrack/library and experimental. For each pathway provide 2–4 artists or exact releases, why they fit, accessible audition references, and relevant available vinyl where possible. Tell me when stock/edition has not been checked and do not claim to have listened to unavailable audio. Include non-buyable discovery leads separately.
+
+Apply the same evidence/scoring discipline. Ask which aspect worked or failed after audition; record precise feedback, adapt the next round and save the session. Keep artistic merit separate from personal affinity. Route unavailable/over-budget desired exact releases to Watch; unexplored sources to Site Finder. Export updated memory and findings.

@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/jazzyalchemist/Adaptive-Vinyl-Finder-Tools/state-v2",
+  "title": "Adaptive Vinyl Finder shared state",
+  "type": "object",
+  "required": ["schema_version", "revision", "updated_at", "preferences", "feedback", "sessions", "collection", "assessments", "watchlist", "sites", "events"],
+  "properties": {
+    "schema_version": {"const": 2},
+    "revision": {"type": "integer", "minimum": 0},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "preferences": {"type": "array", "items": {"$ref": "#/$defs/preference"}},
+    "feedback": {"type": "array", "items": {"$ref": "#/$defs/feedback"}},
+    "sessions": {"type": "array", "items": {"type": "object", "required": ["id", "at"]}},
+    "collection": {"type": "array", "items": {"type": "object", "required": ["id", "status"], "properties": {"id": {"type": "string"}, "status": {"enum": ["owned", "ordered", "wanted", "rejected", "sold"]}}}},
+    "assessments": {"type": "array", "items": {"$ref": "#/$defs/assessment"}},
+    "watchlist": {"type": "array", "items": {"$ref": "#/$defs/watch"}},
+    "sites": {"type": "array", "items": {"type": "object", "required": ["id", "url", "adapter"], "properties": {"id": {"type": "string"}, "url": {"type": "string", "format": "uri"}, "adapter": {"enum": ["manual", "shopify"]}, "currency": {"type": ["string", "null"]}}}},
+    "events": {"type": "array", "items": {"type": "object", "required": ["id", "at", "action", "previous_revision"]}}
+  },
+  "$defs": {
+    "preference": {"type": "object", "required": ["id", "subject", "key", "value", "source", "status", "active", "at"], "properties": {"id": {"type": "string"}, "subject": {"type": "string"}, "key": {"type": "string"}, "source": {"type": "string"}, "status": {"enum": ["confirmed", "inferred"]}, "active": {"type": "boolean"}, "at": {"type": "string", "format": "date-time"}}},
+    "feedback": {"type": "object", "required": ["id", "subject", "record", "rating", "tags", "active", "at"], "properties": {"id": {"type": "string"}, "subject": {"type": "string"}, "rating": {"enum": [-1, 1]}, "tags": {"type": "array", "items": {"type": "string"}}, "active": {"type": "boolean"}}},
+    "score": {"type": ["integer", "null"], "minimum": 1, "maximum": 5},
+    "assessment": {"type": "object", "required": ["id", "scores", "evidence"], "properties": {"id": {"type": "string"}, "scores": {"type": "object", "properties": {"L": {"$ref": "#/$defs/score"}, "G": {"$ref": "#/$defs/score"}, "C": {"$ref": "#/$defs/score"}, "A": {"$ref": "#/$defs/score"}, "R": {"$ref": "#/$defs/score"}, "U": {"$ref": "#/$defs/score"}, "I": {"$ref": "#/$defs/score"}, "V": {"$ref": "#/$defs/score"}, "Q": {"$ref": "#/$defs/score"}}, "additionalProperties": false}, "evidence": {"type": "array"}}},
+    "watch": {"type": "object", "required": ["id", "artist", "title", "enabled", "ceiling", "currency", "basis"], "properties": {"id": {"type": "string"}, "artist": {"type": "string"}, "title": {"type": "string"}, "enabled": {"type": "boolean"}, "ceiling": {"type": "number", "exclusiveMinimum": 0}, "currency": {"type": "string"}, "basis": {"enum": ["item", "landed"]}, "shipping": {"type": ["number", "null"], "minimum": 0}, "tax": {"type": ["number", "null"], "minimum": 0}, "media_min": {"enum": ["M", "NM", "VG+", "VG", "G+", "G", "F", "P", null]}}}
+  }
+}

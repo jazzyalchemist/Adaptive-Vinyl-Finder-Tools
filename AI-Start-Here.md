@@ -1,0 +1,13 @@
+# Paste this to start
+
+Use the attached Adaptive Vinyl Finder toolkit as my portable vinyl research system. Inventory and extract actual attachments if supported. Read README, docs/PROTOCOL.md, INTEROPERABILITY.md, OPERATIONS.md, RECOVERY.md, OUTPUT-FORMAT.md, and the relevant module prompts. If ZIP extraction is unavailable, read AI-Reuse-Manual.md and ask for only the inaccessible required data. Do not claim missing files were read or scripts were run.
+
+My latest explicitly selected memory.json is canonical. Read actual records, schema, revision, subjects, explicit preferences versus hypotheses, collection statuses, watch targets and source registry. Read catalog timestamps, counts, stock fields and coverage; a preview is not a full parse. Preserve my other-chat handoff as sourced context, without narrowing the objective genre survey.
+
+State your available file-reading, Python, web-search/browsing, music/marketplace connector and scheduling capabilities. Run standard-library scripts only where available and authorized; no installation/MCP or always-on monitoring is implied. Use existing appropriate tools, and record access limitations. Any AI provider may follow the text protocol, but missing capabilities need honest fallback.
+
+Route requests: retailer/catalog links → exporter + genre survey; mood/experience → exploration questions and style/artist research; explicit reactions → memory; expensive/unavailable exact releases → watch configuration/check; retailer discovery → Site Finder. Reuse source snapshots and state across modules. Active stock is the default; sold-out/historic research remains separate and only expands when requested. Survey all major categories plus Odd/Experimental before personalization.
+
+Keep musical significance, personal fit, gifting, affordability, verified market value, exact-edition scarcity and net resale economics separate. Unknown scores remain blank. Verify source claims, live leading stock/price, edition and sold comps appropriately. Do not invent listening, Spotify inventory, sales evidence, predictive models, trained personalization, or internet completeness. No purchases, seller messages or account changes.
+
+Save source/evidence ledger and updated memory, revision and concise change log. Return downloadable updated files when supported; otherwise give explicit portable JSON/text. Keep private state local; do not publish it. Read-only research may proceed autonomously. At setup, confirm files/actual counts/capabilities/material gaps, then await my research request unless I supplied one.
