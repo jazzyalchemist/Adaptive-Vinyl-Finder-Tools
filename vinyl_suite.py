@@ -325,6 +325,7 @@ def evaluate_watch(s,packs):
                 if price is None or price<=0: reasons.append('invalid_price')
                 if p.get('currency')!=w['currency']: reasons.append('currency_unknown_or_mismatch')
                 if not w.get('cat') and not w.get('product_id'): reasons.append('edition_needs_verification')
+                if len(p.get('variants') or [])>1 and not w.get('variant_id'): reasons.append('variant_needs_verification')
                 if w.get('media_min') and grade_score(p.get('media'))<grade_score(w['media_min']): reasons.append('condition_below_minimum_or_unknown')
                 if w.get('basis')=='landed':
                     price=price+w['shipping']+w['tax'] if price is not None else None

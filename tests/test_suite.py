@@ -109,6 +109,10 @@ class WatchTests(unittest.TestCase):
         self.assertEqual(len(self.report()['alerts']),1)
         self.assertEqual(v.grade_score('Near Mint (NM or M-)'),5)
         self.assertEqual(v.grade_score('Unknown'),0)
+    def test_multiple_variants_need_exact_variant(self):
+        self.p.update(variants=[{'id':2},{'id':3}],variant_id='2')
+        self.assertEqual(len(self.report()['alerts']),0)
+        self.s['watchlist'][0]['variant_id']='2'; self.assertEqual(len(self.report()['alerts']),1)
 
 class SitesTests(unittest.TestCase):
     def test_broad_and_niche_queries(self):
