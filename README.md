@@ -1,6 +1,6 @@
-# Adaptive Vinyl Finder Tools — 2.0
+# Adaptive Vinyl Finder Tools — 2.1
 
-Five interoperable tools for lifelong listening, discovery, gifts, bargains, and evidence-backed collector research. Python 3.10+; no third-party Python packages or paid API required. AI browsing depends on the capabilities of the AI you use.
+Seven interoperable tools for lifelong listening, discovery, gifts, bargains, and evidence-backed collector research. Python 3.10+; no third-party Python packages or paid API required. AI browsing depends on the capabilities of the AI you use.
 
 | Tool | What runs locally | What an AI adds |
 |---|---|---|
@@ -8,6 +8,8 @@ Five interoperable tools for lifelong listening, discovery, gifts, bargains, and
 | Memory Matrix | Persistent preferences, recipient profiles, collection dispositions, assessments, feedback, interpretable adaptation, backups | Careful interpretation, explicit-versus-inferred distinctions |
 | Experience Explorer | Mood questionnaire, session plan, broad style heuristics, feedback modifiers | New artists/releases, listening references, catalog matching, evidence-based shortlists |
 | Record Watchlist | Edition constraints, condition floor, item/landed ceiling, refreshed source checks, change alerts and deduplication | Wider web searches for missing records and manual-site verification |
+| Research Auditor | Canonical catalog ledger, issue triage, incremental comparison, 12 metadata candidates per exploration tier | Audition, recipient fit, exact-edition and market verification |
+| Listening History | Private Spotify Extended Streaming History import, dated tracks/artists/minutes and optional sourced genre allocation | Source-backed genre mapping and personalized exploration |
 | Site Finder | Broad and niche search query matrix, retailer registry, reachability probe | Actual internet search, retailer assessment, genre/region coverage |
 
 These are downloadable code and AI workflows, not tools automatically installed into every AI. File upload does not execute code, grant web access, persist memory across chats, or create a background service. Use the same `private/memory.json` across modules and carry it between chats. Keep a copy outside temporary AI sandboxes.
@@ -46,7 +48,7 @@ python3 vinyl_suite.py export --input Record-Selector-Catalog.json --out private
 
 This preserves original timestamps and coverage; it does not refresh old stock. The earlier October 8, 2026 snapshot contained 25,000 products, including 8,862 available, against a store-advertised 25,001. Never label that snapshot complete. This repository contains no live store inventory.
 
-Individual launchers: `catalog_export.py`, `memory_matrix.py`, `experience_explorer.py`, `record_watchlist.py`, `site_finder.py`. They invoke the same core. Example: `python3 catalog_export.py --input catalog.json`; `python3 memory_matrix.py view`. Add `--state /path/to/memory.json` to select a shared database. The all-in-one CLI requires global `--state` before the module name.
+Individual launchers: `catalog_export.py`, `memory_matrix.py`, `experience_explorer.py`, `record_watchlist.py`, `site_finder.py`. Additional direct CLIs: `research_engine.py` and `listening_history.py`; both support `--help`. They invoke the same core. Example: `python3 catalog_export.py --input catalog.json`; `python3 memory_matrix.py view`. Add `--state /path/to/memory.json` to select a shared database. The all-in-one CLI requires global `--state` before the module name.
 
 ## What to open
 
@@ -57,7 +59,7 @@ Individual launchers: `catalog_export.py`, `memory_matrix.py`, `experience_explo
 - `docs/OPERATIONS.md`: command reference, scheduling, checkpoints, and limitations.
 - `docs/RECOVERY.md`: known error handling and safe recovery paths.
 - `docs/OUTPUT-FORMAT.md`: consistent research tables and ledgers.
-- `prompts/`: bootstrap and all five AI operating prompts.
+- `prompts/`: bootstrap and all seven AI operating prompts.
 - `templates/`: empty shared memory, schema descriptions, and data examples.
 
 ## Watch scheduling
@@ -66,7 +68,7 @@ Watch checks are read-only. Configure exact targets and retailers, test one chec
 
 ## Memory and learning
 
-Explicit preferences outrank inferred patterns. Feedback contributes a transparent smoothed weight `(likes − dislikes)/(feedback count + 3)` for each user-supplied tag. It is a revisable taste hypothesis, not a trained recommender, probability, or permanent identity. Session mood stays session-scoped. Recipients have separate subjects. No Spotify inventory is invented; import an actual export if your connector cannot enumerate it.
+Explicit preferences outrank inferred patterns. Feedback contributes a transparent smoothed weight `(positive_mass − negative_mass)/(total_mass + 3)`; curiosity uses mass .25 and an auditioned reaction uses mass 1 for each user-supplied tag. It is a revisable taste hypothesis, not a trained recommender, probability, or permanent identity. Session mood stays session-scoped. Recipients have separate subjects. No Spotify inventory is invented; import an actual export if your connector cannot enumerate it.
 
 `memory forget ID` deactivates a preference/feedback entry and recomputes learning. It does not erase audit history or backups. For complete deletion, remove the entry and its historical copies deliberately; see recovery guidance. `memory restore BACKUP` restores data while retaining a new audit event and backing up current state.
 
@@ -74,6 +76,6 @@ Explicit preferences outrank inferred patterns. Feedback contributes a transpare
 
 The repository is public. Personal memory, collection data, catalog snapshots, reports, credentials, and logs belong under ignored `private/`. Packaging uses an explicit source allowlist and excludes private state. Blank templates are public. The original protocol's artist examples are retained; the collector name and destination are replaced with configurable placeholders.
 
-Run `python3 -m unittest discover -s tests -v`. Run `python3 build_packages.py` to rebuild complete and individual ZIPs plus the single-file AI manual. GitHub Actions runs tests on pushes and pull requests. Local mocked tests do not certify a live retailer, current stock, exhaustive internet coverage, or OS scheduler delivery.
+Read [docs/RESEARCH-WORKFLOW.md](docs/RESEARCH-WORKFLOW.md) for the 2.1 research pipeline, three 12-release discovery tiers, unknown scores, history commands and watch recovery. Run `python3 -m unittest discover -s tests -v`. Run `python3 build_packages.py` to rebuild complete and individual ZIPs plus the single-file AI manual. GitHub Actions runs tests on pushes and pull requests. Local mocked tests do not certify a live retailer, current stock, exhaustive internet coverage, or OS scheduler delivery.
 
 Source code and original documentation are available for unlimited reuse under the MIT license. Provider limits, retailer access rules, and third-party catalog rights still apply. No purchase, seller message, account modification, login, or payment occurs.

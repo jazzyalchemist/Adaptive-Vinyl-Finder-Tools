@@ -56,3 +56,8 @@ The scanner finishes a partial result when a page fails. `export_catalog` writes
 ## Provider-neutral reuse
 
 Keep toolkit + latest memory + source catalog + report/evidence ledger together. AI providers differ in ZIP/file/Python/network/scheduling support. Select the capability tier honestly. An uploaded ZIP does not install a connector. A prompt can route available tools; it cannot manufacture missing tools. The protocol is usable by text-only AI through the combined manual, while code execution requires Python. Same output structure across providers keeps data portable.
+
+
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.

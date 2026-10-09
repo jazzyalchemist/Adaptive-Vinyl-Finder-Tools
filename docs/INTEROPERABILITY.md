@@ -53,3 +53,8 @@ Sites: stable ID, URL, name, genres, adapter (`shopify` or `manual`), currency, 
 - Scheduler-enabled environment: run configured checks between chats. Requires durable state, available source access, and a configured delivery route if external notifications are desired.
 
 Use any existing available tools appropriately (Spotify exports, authorized marketplace APIs, browsing, local catalogs, prior evidence), recording capability and coverage rather than inventing integrations.
+
+
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.

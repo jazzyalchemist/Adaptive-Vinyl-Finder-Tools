@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Adaptive Vinyl Finder 2.0 — portable, standard-library research tools."""
+"""Adaptive Vinyl Finder 2.1 — portable, standard-library research tools."""
 import argparse
 import contextlib
 import csv
@@ -18,12 +18,12 @@ import urllib.request as ur
 import uuid
 import xml.etree.ElementTree as ET
 
-VERSION = '2.0.0'
+VERSION = '2.1.0'
 FIELDS = ['id','variant_id','artist','title','name','price','currency','available','genre','styles','label','cat','country','released','format','media','sleeve','comments','tracklist','url','checked_at','source','flags']
 KEYS = ['ARTIST','TITLE','LABEL','CAT','TYPE','FORMAT','COUNTRY','RELEASED','GENRE','STYLES','MEDIA','SLEEVE','TRACKLIST','COMMENTS']
 GENRES = {
  'Electronic': 'electronic|house|techno|trance|ambient|downtempo|dubstep|drum & bass|jungle|idm|electro|breakbeat',
- 'Jazz': 'jazz|bebop|fusion|free improvisation', 'Rock': 'rock|prog|psychedelic|punk|grunge',
+ 'Jazz': 'jazz|bebop|fusion|free improvisation', 'Rock': r'rock|\bprog\b|psychedelic|punk|grunge',
  'Metal': 'metal|doom|thrash|black metal|death metal', 'Hip-hop': 'hip.hop|rap|boom bap',
  'Soul / R&B / Funk': 'soul|r&b|funk|rhythm & blues|neo.soul', 'Pop': 'pop|synthpop',
  'Country': 'country|bluegrass|honky.tonk', 'Folk / Americana': 'folk|americana|singer.songwriter',
@@ -206,7 +206,9 @@ def load_catalog(path):
         else: raise ValueError('Expected catalog object with products array, product array, or CSV')
     for row in pack['products']:
         if 'body_html' in row:
-            row.update(normalize(row,pack.get('source','https://unknown.invalid'),pack.get('currency'),pack.get('checked_at')))
+            observed=row.get('checked_at') or pack.get('checked_at')
+            row.update(normalize(row,pack.get('source','https://unknown.invalid'),pack.get('currency'),observed))
+            row['checked_at']=observed  # Offline import must never invent a fresh observation.
         row['available']=truth(row.get('available')); row['price']=number(row.get('price'))
         row.setdefault('currency',pack.get('currency')); row.setdefault('checked_at',pack.get('checked_at'))
         row.setdefault('flags',[])
@@ -262,11 +264,12 @@ def learned(s, subject='self'):
     for f in s['feedback']:
         if not f.get('active',True) or f.get('subject','self')!=subject: continue
         for tag in f['tags']:
-            entry=scores.setdefault(tag,{'positive':0,'negative':0,'weight':0,'status':'hypothesis'})
+            entry=scores.setdefault(tag,{'positive':0,'negative':0,'positive_mass':0,'negative_mass':0,'weight':0,'status':'hypothesis'})
             entry['positive' if f['rating']>0 else 'negative']+=1
+            entry['positive_mass' if f['rating']>0 else 'negative_mass']+=.25 if f.get('stage')=='interested' else 1
     for v in scores.values():
-        count=v['positive']+v['negative']; v['weight']=round((v['positive']-v['negative'])/(count+3),3)
-        v['status']='provisional pattern' if count>=3 else 'hypothesis'
+        mass=v['positive_mass']+v['negative_mass']; v['weight']=round((v['positive_mass']-v['negative_mass'])/(mass+3),3)
+        v['status']='provisional pattern' if mass>=3 else 'hypothesis'
     return scores
 
 def memory_view(s):
@@ -290,8 +293,11 @@ def explore_plan(s,mood,experience,energy,lyrics,novelty):
     if novelty=='high':
         unseen=next((x for x in ranked[4:] if x['style'] not in {p['style'] for p in picked}),None)
         if unseen: picked.append(dict(unseen,role='wildcard; deliberately weak prior'))
+    profile=read_json(Path(__file__).resolve().parent/'templates/discovery-profile.json')
     return {'id':uid(),'at':now(),'mood':mood,'experience':experience,'energy':energy,'lyrics':lyrics,'novelty':novelty,
             'shortlist':picked,'scope':'Session only; permanent preferences change only through explicit statements or feedback.',
+            'exploration_tiers':[dict(t,target_releases=12) for t in profile['tiers']],
+            'tier_policy':'At least 12 release leads per tier by default; report shortfalls rather than force unrelated stock. Metadata routes are provisional; actual history can customize the profile.',
             'confirmed_context':[p for p in s['preferences'] if p.get('active') and p.get('status')=='confirmed' and p.get('subject')=='self'],
             'queries':[f'"{p["style"]}" vinyl record label albums {experience}' for p in picked]}
 
@@ -309,17 +315,23 @@ def watch_match(w,p):
         elif actual.casefold().strip()!=str(want).casefold().strip(): return False
     return True
 
+def fresh_observation(stamp):
+    try:
+        return 0 <= (dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(stamp.replace('Z','+00:00'))).total_seconds() <= 86400 if stamp else False
+    except (ValueError,TypeError,AttributeError):
+        return False
+
 def evaluate_watch(s,packs):
     report={'checked_at':now(),'alerts':[],'results':[],'coverage':[{'source':p.get('source'),'checked_at':p.get('checked_at'),'coverage':p.get('coverage')} for p in packs]}
     for w in s['watchlist']:
         if not w.get('enabled'): continue
-        matches=[]; current_qualified=[]
+        matches=[]; current_qualified=[]; observed_keys=set(); observations={x['offer_key']:x for x in w.get('last_observations',[])}
+        legacy_signatures=set(w.get('last_qualified',[])) if not observations else set()
         for pack in packs:
             for p in pack['products']:
                 if not watch_match(w,p): continue
                 reasons=[]; price=p.get('price'); stock=p.get('available'); stamp=p.get('checked_at') or pack.get('checked_at')
-                try: fresh=0<=(dt.datetime.now(dt.timezone.utc)-dt.datetime.fromisoformat(stamp.replace('Z','+00:00'))).total_seconds()<=86400 if stamp else False
-                except (ValueError,TypeError): fresh=False
+                fresh=fresh_observation(stamp)
                 if not fresh: reasons.append('stale_or_missing_timestamp')
                 if stock is not True: reasons.append('sold_out' if stock is False else 'availability_unknown')
                 if price is None or price<=0: reasons.append('invalid_price')
@@ -333,13 +345,23 @@ def evaluate_watch(s,packs):
                 match={'watch_id':w['id'],'record':p,'comparison_price':price,'basis':w['basis'],
                        'status':'qualifying_seller_claim' if not reasons else 'research_lead','reasons':reasons}
                 matches.append(match)
+                offer_key=json.dumps([p.get('source') or pack.get('source'),p.get('id'),p.get('variant_id')])
+                observed_keys.add(offer_key)
                 if not reasons:
                     signature=hashlib.sha256(json.dumps([w['id'],p.get('source'),p.get('id'),p.get('variant_id'),price],sort_keys=True).encode()).hexdigest()
                     current_qualified.append(signature)
-                    if signature not in w.get('last_qualified',[]):
+                    if signature!=observations.get(offer_key,{}).get('signature') and signature not in legacy_signatures:
                         report['alerts'].append(match)
+                    observations[offer_key]={'offer_key':offer_key,'source':p.get('source') or pack.get('source'),'signature':signature,'last_seen':stamp,'status':'qualified'}
+                elif fresh and stock is not None and p.get('currency')==w['currency'] and price is not None and price>0:
+                    observations[offer_key]={'offer_key':offer_key,'source':p.get('source') or pack.get('source'),'signature':None,'last_seen':stamp,'status':'observed_not_qualified'}
         w['last_checked']=report['checked_at']
-        w['last_qualified']=current_qualified
+        # Absence in partial/failed sources is unknown, not sold out. Clear only after complete observation.
+        complete_sources={pack.get('source') for pack in packs if fresh_observation(pack.get('checked_at')) and pack.get('coverage',{}).get('complete') is True and not pack.get('coverage',{}).get('errors')}
+        for key,old in observations.items():
+            if key not in observed_keys and old.get('source') in complete_sources:old['signature']=None;old['status']='not_in_complete_snapshot'
+        w['last_observations']=list(observations.values())
+        w['last_qualified']=list({x['signature'] for x in observations.values() if x.get('signature')} or legacy_signatures)
         report['results'].append({'watch_id':w['id'],'matches':matches,'status':'matches_found' if matches else 'not_found_in_checked_sources',
                                   'search_queries':[f'"{w["artist"]}" "{w["title"]}" "{w.get("cat", "")}" vinyl buy',f'"{w["artist"]}" "{w["title"]}" record shop -site:ebay.com']})
     return report
@@ -366,6 +388,7 @@ def main():
     ms.add_parser('init'); ms.add_parser('view')
     put=ms.add_parser('set'); put.add_argument('key'); put.add_argument('value'); put.add_argument('--subject',default='self'); put.add_argument('--source',required=True); put.add_argument('--inferred',action='store_true')
     fb=ms.add_parser('feedback'); fb.add_argument('record'); fb.add_argument('--rating',type=int,choices=[-1,1],required=True); fb.add_argument('--tags',required=True); fb.add_argument('--subject',default='self'); fb.add_argument('--reason',default='')
+    fb.add_argument('--stage',choices=['interested','auditioned','owned'],default='auditioned')
     forget=ms.add_parser('forget'); forget.add_argument('id')
     undo=ms.add_parser('restore'); undo.add_argument('backup')
     imp=ms.add_parser('import-items'); imp.add_argument('kind',choices=['collection','assessments']); imp.add_argument('file')
@@ -411,7 +434,7 @@ def main():
             elif args.action=='feedback':
                 tags=sorted(set(t.strip().lower() for t in args.tags.split(',') if t.strip()))
                 if not tags: raise ValueError('Supply at least one feedback tag')
-                row={'id':uid(),'subject':args.subject,'record':args.record,'rating':args.rating,'tags':tags,'reason':args.reason,'at':now(),'active':True}
+                row={'id':uid(),'subject':args.subject,'record':args.record,'rating':args.rating,'tags':tags,'reason':args.reason,'stage':args.stage,'at':now(),'active':True}
                 s['feedback'].append(row); print(row['id'])
             elif args.action=='forget':
                 found=False

@@ -1,0 +1,5 @@
+# Research Auditor
+
+Read the full protocol, RESEARCH-WORKFLOW.md and actual private memory. Parse the source once with research_engine.py where executable. Keep original metadata, timestamps and legacy scores; distinguish mechanical screening from editorial review, audition, current edition/offer verification and market underwriting. Use the existing named taxonomy and annotate valid genre overlap rather than treating it as an error. Prioritize actual identity/price/stock blockers.
+
+Compare an existing prior research-ledger.json using --previous to reuse unchanged metadata/evidence without pretending dates refreshed. Maintain one canonical card and purpose-tagged views across all genres and collection/gift/bargain/collector/resale goals. Name each gift recipient. Leave unsourced personal/market scores unknown. Metadata tier candidates require audition and explicit-preference review; external discovery leads remain separate from buyable seller offers. Verify actionable decisions first, log gaps and stop unnecessary comparable searches when exact evidence is unavailable. Export ledgers, evidence and updated memory.

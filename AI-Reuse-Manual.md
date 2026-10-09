@@ -8,9 +8,9 @@ Canonical source documents follow in full. Read module boundaries and capabiliti
 
 Source: README.md
 
-# Adaptive Vinyl Finder Tools — 2.0
+# Adaptive Vinyl Finder Tools — 2.1
 
-Five interoperable tools for lifelong listening, discovery, gifts, bargains, and evidence-backed collector research. Python 3.10+; no third-party Python packages or paid API required. AI browsing depends on the capabilities of the AI you use.
+Seven interoperable tools for lifelong listening, discovery, gifts, bargains, and evidence-backed collector research. Python 3.10+; no third-party Python packages or paid API required. AI browsing depends on the capabilities of the AI you use.
 
 | Tool | What runs locally | What an AI adds |
 |---|---|---|
@@ -18,6 +18,8 @@ Five interoperable tools for lifelong listening, discovery, gifts, bargains, and
 | Memory Matrix | Persistent preferences, recipient profiles, collection dispositions, assessments, feedback, interpretable adaptation, backups | Careful interpretation, explicit-versus-inferred distinctions |
 | Experience Explorer | Mood questionnaire, session plan, broad style heuristics, feedback modifiers | New artists/releases, listening references, catalog matching, evidence-based shortlists |
 | Record Watchlist | Edition constraints, condition floor, item/landed ceiling, refreshed source checks, change alerts and deduplication | Wider web searches for missing records and manual-site verification |
+| Research Auditor | Canonical catalog ledger, issue triage, incremental comparison, 12 metadata candidates per exploration tier | Audition, recipient fit, exact-edition and market verification |
+| Listening History | Private Spotify Extended Streaming History import, dated tracks/artists/minutes and optional sourced genre allocation | Source-backed genre mapping and personalized exploration |
 | Site Finder | Broad and niche search query matrix, retailer registry, reachability probe | Actual internet search, retailer assessment, genre/region coverage |
 
 These are downloadable code and AI workflows, not tools automatically installed into every AI. File upload does not execute code, grant web access, persist memory across chats, or create a background service. Use the same `private/memory.json` across modules and carry it between chats. Keep a copy outside temporary AI sandboxes.
@@ -56,7 +58,7 @@ python3 vinyl_suite.py export --input Record-Selector-Catalog.json --out private
 
 This preserves original timestamps and coverage; it does not refresh old stock. The earlier October 8, 2026 snapshot contained 25,000 products, including 8,862 available, against a store-advertised 25,001. Never label that snapshot complete. This repository contains no live store inventory.
 
-Individual launchers: `catalog_export.py`, `memory_matrix.py`, `experience_explorer.py`, `record_watchlist.py`, `site_finder.py`. They invoke the same core. Example: `python3 catalog_export.py --input catalog.json`; `python3 memory_matrix.py view`. Add `--state /path/to/memory.json` to select a shared database. The all-in-one CLI requires global `--state` before the module name.
+Individual launchers: `catalog_export.py`, `memory_matrix.py`, `experience_explorer.py`, `record_watchlist.py`, `site_finder.py`. Additional direct CLIs: `research_engine.py` and `listening_history.py`; both support `--help`. They invoke the same core. Example: `python3 catalog_export.py --input catalog.json`; `python3 memory_matrix.py view`. Add `--state /path/to/memory.json` to select a shared database. The all-in-one CLI requires global `--state` before the module name.
 
 ## What to open
 
@@ -67,7 +69,7 @@ Individual launchers: `catalog_export.py`, `memory_matrix.py`, `experience_explo
 - `docs/OPERATIONS.md`: command reference, scheduling, checkpoints, and limitations.
 - `docs/RECOVERY.md`: known error handling and safe recovery paths.
 - `docs/OUTPUT-FORMAT.md`: consistent research tables and ledgers.
-- `prompts/`: bootstrap and all five AI operating prompts.
+- `prompts/`: bootstrap and all seven AI operating prompts.
 - `templates/`: empty shared memory, schema descriptions, and data examples.
 
 ## Watch scheduling
@@ -76,7 +78,7 @@ Watch checks are read-only. Configure exact targets and retailers, test one chec
 
 ## Memory and learning
 
-Explicit preferences outrank inferred patterns. Feedback contributes a transparent smoothed weight `(likes − dislikes)/(feedback count + 3)` for each user-supplied tag. It is a revisable taste hypothesis, not a trained recommender, probability, or permanent identity. Session mood stays session-scoped. Recipients have separate subjects. No Spotify inventory is invented; import an actual export if your connector cannot enumerate it.
+Explicit preferences outrank inferred patterns. Feedback contributes a transparent smoothed weight `(positive_mass − negative_mass)/(total_mass + 3)`; curiosity uses mass .25 and an auditioned reaction uses mass 1 for each user-supplied tag. It is a revisable taste hypothesis, not a trained recommender, probability, or permanent identity. Session mood stays session-scoped. Recipients have separate subjects. No Spotify inventory is invented; import an actual export if your connector cannot enumerate it.
 
 `memory forget ID` deactivates a preference/feedback entry and recomputes learning. It does not erase audit history or backups. For complete deletion, remove the entry and its historical copies deliberately; see recovery guidance. `memory restore BACKUP` restores data while retaining a new audit event and backing up current state.
 
@@ -84,9 +86,76 @@ Explicit preferences outrank inferred patterns. Feedback contributes a transpare
 
 The repository is public. Personal memory, collection data, catalog snapshots, reports, credentials, and logs belong under ignored `private/`. Packaging uses an explicit source allowlist and excludes private state. Blank templates are public. The original protocol's artist examples are retained; the collector name and destination are replaced with configurable placeholders.
 
-Run `python3 -m unittest discover -s tests -v`. Run `python3 build_packages.py` to rebuild complete and individual ZIPs plus the single-file AI manual. GitHub Actions runs tests on pushes and pull requests. Local mocked tests do not certify a live retailer, current stock, exhaustive internet coverage, or OS scheduler delivery.
+Read [docs/RESEARCH-WORKFLOW.md](docs/RESEARCH-WORKFLOW.md) for the 2.1 research pipeline, three 12-release discovery tiers, unknown scores, history commands and watch recovery. Run `python3 -m unittest discover -s tests -v`. Run `python3 build_packages.py` to rebuild complete and individual ZIPs plus the single-file AI manual. GitHub Actions runs tests on pushes and pull requests. Local mocked tests do not certify a live retailer, current stock, exhaustive internet coverage, or OS scheduler delivery.
 
 Source code and original documentation are available for unlimited reuse under the MIT license. Provider limits, retailer access rules, and third-party catalog rights still apply. No purchase, seller message, account modification, login, or payment occurs.
+
+
+---
+
+Source: docs/EVOLUTION-ROADMAP.md
+
+# Evolution roadmap — preserve the collector's mission
+
+Design goal: help someone collect music for a lifetime, give thoughtful records, discover unfamiliar traditions, spot fairly priced interesting copies, and test credible collector/resale theses. Scarcity is one dimension; replacement availability, sound, condition, fit and total cost still matter. A long holding period increases forecast uncertainty. Success is a collection worth living with, plus decisions that can be explained and corrected.
+
+## What exists in 2.1
+
+Seven portable local tools/workflows; active/full/sold-out catalog exports; durable user-managed JSON memory; reversible tag feedback; exact watch constraints; site search plans; catalog issue triage and unchanged-metadata comparison; multi-year listening-history import; three-tier discovery defaults; original evidence/scoring protocol. Current routing is heuristic, not a trained recommendation model. No server, scheduler, notification delivery or checkout automation is running just because files exist.
+
+## Next tools, in dependency order
+
+| Priority | Tool/addition | Decision it improves | Acceptance criterion |
+|---|---|---|---|
+| 1 | Recording → release → pressing → copy → offer resolver | Is this actually the desired music/version and physical edition? | Never merges CD, remix, pressing variant or differently graded copies solely by title/catalog number; unresolved matches stay explicit |
+| 1 | Taste/recipient compiler | Which records suit me or this named person? | Combines explicit preferences, measured history, unfamiliarity and audition feedback with source/confidence; keeps recipients separate |
+| 1 | Multi-retailer offer registry | Where is the exact acceptable copy available? | Same-edition offers remain separate; verified currency, timestamps, stock, grades and source failures survive updates |
+| 2 | Landed-cart optimizer | Which store combination costs least for the desired records? | Computes real destination shipping/thresholds, taxes/fees and acceptable substitutions; reports optimality scope and unknown costs |
+| 2 | Urgency evaluator | Buy now, investigate promptly, watch, or wait? | Urgent label has exact identity, fresh stock, acceptable condition, budget/landed ceiling and documented scarcity/replacement evidence; shows contradictory evidence |
+| 2 | Inventory/price/repress observatory | Is scarcity changing or only a seller's claim? | Repeated dated observations distinguish missing/failed feed from sold out, replenishment, deletion and announced repress |
+| 2 | Durable watcher and alert delivery | Can a valuable new offer be noticed reliably? | Survives restart, deduplicates alert events, exposes source failures, tests chosen delivery channel, never purchases automatically |
+| 3 | Copy-quality and lifetime-care assistant | Will I enjoy this copy for decades? | Quiet-music play-grade needs, sleeve/inserts, cleaning/setup/storage and replacement choices considered separately from monetary rarity |
+| 3 | Collector-thesis lab | Does a resale hypothesis hold up? | Exact-edition comparable data, net economics, repress/substitute risk and out-of-time validation; no numeric forecast without sufficient evidence |
+| 3 | Coverage/diversity auditor | What would personalized ranking hide? | Maintains genre breadth, minority styles, affordable curiosities and independent artistic merit; reports thin/no-match areas |
+| 3 | Feedback experiment designer | What small listening comparison teaches us most? | A short contrasting pair tests one uncertain attribute; curiosity isn't treated as a favorite or purchase |
+
+## Cart optimization: make the promise precise
+
+Each desired release has a set of acceptable pressings/copies and a maximum landed willingness to pay; a gift can require a better sleeve than a personal DJ single. Let x choose one acceptable offer per required item, and y indicate use of a store. Minimize items + each store's actual shipping function + destination taxes/fixed fees, subject to availability, grade, edition, currency, budget and deadline constraints. Compare normalized money using a dated FX source only when currencies differ. Do not mix assumed fee/tax estimates with confirmed checkout totals.
+
+For five to twenty items and a small offer set, enumerate feasible baskets or use a mixed-integer solver with proven termination/bounds. If search is truncated, call the result the best tested basket, not a global optimum. Output the next-best feasible basket, savings, unknown charges and sensitivity: a different shipping estimate or one sold-out copy may change the winner.
+
+Illustration only: Store A sells X=$20 and Y=$20 with $8 shipping, Store B sells Y=$15 and Z=$25 with $8 shipping. Buying X at A and Y/Z at B totals $76; X/Y at A and Z at B totals $81. This is not a current merchant quote. Thresholds/taxes can reverse the choice.
+
+Then evaluate optional cart additions **after** satisfying the requested items. Marginal landed cost = optimized basket with extra item minus baseline basket. An addition can reduce shipping, but increases item spending. Offer it only if it earns its place for musical/collector reasons and respects discretionary budget. Show total outlay and savings explicitly; never imply free shipping makes unnecessary records free. Suppress already owned/ordered copies unless an intentional upgrade/gift is selected.
+
+## Urgency without empty FOMO
+
+Use four actions: **investigate immediately**, **ready for user's buy decision**, **watch**, **wait**. The first is allowed when a promising candidate needs urgent verification; it is not permission to call an unverified offer a bargain. A user-defined emergency threshold can notify about a verified scarce exact edition at or below the ceiling, with fresh stock and acceptable grade. The alert must say what was checked, when, what remains uncertain and why delay may matter.
+
+A single low-stock count, promo stamp, autograph, old release date, colored vinyl or sold-out page does not prove market rarity or urgency. Account for replenishment, equivalent good reissues, repress announcements, actual repeated sale frequency, new supply and personal price ceiling. Keep urgency separate from U, which remains **resale underwriting** in the original score system. No purchase without explicit authorization.
+
+## Lower recurring cost and better reliability
+
+Deterministic parsing, filtering, IDs, scoring eligibility and shipping arithmetic should run in code. Reserve AI work for musical interpretation, ambiguous identity, claims needing research and concise explanation. Cache original source documents and evidence dates; invalidate price/stock quickly and edition metadata more slowly. Reuse unchanged catalog rows instead of resummarizing the entire store for every watch. Source feeds may still require a full retrieval; do not claim a server-side delta API where none exists.
+
+Maintain per-source freshness and failure budgets, conditional requests where supported, adaptive polling, timeouts/backoff and checkpoints. Use a complete slower catalog sweep plus focused checks of high-priority targets between sweeps, subject to retailer access policies. A source failure should produce diagnostics, not a sold-out event. Notifications need a persistent queue/outbox and idempotent event IDs. Test the chosen route before claiming alerts are active. High-frequency polling should be justified by store behavior and actual quotas, not the word “always.”
+
+Track system quality: edition-match precision on a manually reviewed sample; live verification coverage for actionable offers; audition acceptance by tier and recipient; unknown-genre minutes; missed/suppressed alert events; false restocks; measured cart savings; research time per useful decision. Record rejections and reasons, including noise, wrong version, already owned and too expensive. Do not train popularity or investment claims from a small personal sample.
+
+## Future Taskade app: proposed architecture, not deployed
+
+Use Taskade for intent forms/checklists, named-recipient selection, review queues and readable results. An external service can keep the canonical catalog/offer/evidence database, perform code-based research stages, optimize carts and run durable checks. This division is a recommendation based on data volume and reliability needs, not a claim that Taskade cannot do those jobs.
+
+Official Taskade documentation describes API/webhook integration and scheduled triggers. Its September 2, 2026 schedule guide lists 5–30-minute and longer intervals, while an older Help Center page lists hourly and longer. Verify the actual account's plan, quotas, trigger options and delivery latency before promising emergency timing. Schedule frequency is not guaranteed instant detection. Use official docs when implementing, and test one end-to-end job before scaling.
+
+Sources checked October 9, 2026: [Taskade API](https://help.taskade.com/en/articles/8958531-taskade-developer-api), [inbound webhooks](https://developers.taskade.com/docs/api/agents/inbound-webhooks), [current schedule guide](https://www.taskade.com/learn/automation/schedule), [older schedule help](https://help.taskade.com/en/articles/10477405-schedule-automation-trigger). No Taskade resources were created or connected in this update.
+
+Intent checklist: personal collection / named gift / objective collector merit / resale research / exploration / price watch; genres open or constrained; desired recording and acceptable editions; budget and discretionary add-ons; condition floors; destination; deadline; familiarity; owned/ordered exclusions; source scope; urgency threshold. Defaults come from explicit memory, with session overrides. Do not make the user complete every field for an ordinary broad research request.
+
+Data entities: Person, Preference, FeedbackEvent, Recording, Release, Pressing, Copy, Offer, Retailer, Snapshot, EvidenceClaim, Assessment, WatchTarget, ObservationEvent, Alert, Basket, JobRun. Store input hashes and schema/tool versions to reproduce decisions. Use private credentials and scoped tokens; never upload raw listening IP/device history or private recipient data to the public repository.
+
+Proposed sequence: intent → cached catalogs/current offer checks → identity resolution → objective genre/merit screen → purpose-specific views and three-tier discovery → needed evidence → basket comparison → user review; observation events route desired missing/over-budget records to Watch. The next app increment should implement one complete end-to-end retailer/recipient/basket/watch flow with tests before adding many agents or sources.
 
 
 ---
@@ -148,6 +217,11 @@ Sites: stable ID, URL, name, genres, adapter (`shopify` or `manual`), currency, 
 - Scheduler-enabled environment: run configured checks between chats. Requires durable state, available source access, and a configured delivery route if external notifications are desired.
 
 Use any existing available tools appropriately (Spotify exports, authorized marketplace APIs, browsing, local catalogs, prior evidence), recording capability and coverage rather than inventing integrations.
+
+
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.
 
 
 ---
@@ -214,6 +288,11 @@ The scanner finishes a partial result when a page fails. `export_catalog` writes
 Keep toolkit + latest memory + source catalog + report/evidence ledger together. AI providers differ in ZIP/file/Python/network/scheduling support. Select the capability tier honestly. An uploaded ZIP does not install a connector. A prompt can route available tools; it cannot manufacture missing tools. The protocol is usable by text-only AI through the combined manual, while code execution requires Python. Same output structure across providers keeps data portable.
 
 
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.
+
+
 ---
 
 Source: docs/OUTPUT-FORMAT.md
@@ -230,13 +309,18 @@ Evidence ledger: assessment ID, listing ID/variant/release ID, claim, source URL
 
 Resale worksheet: item + incoming shipping + tax + cleaning/insurance; credible conservative sold-price scenario; actual or disclosed assumed fees; outgoing subsidy + packaging; net proceeds; profit; break-even; inflation/opportunity-cost assumptions; liquidity; repress/substitute risk; falsifiable thesis. No 50–60-year price promise.
 
-Discovery output: session intent, 3–5 style pathways (familiar/adjacent/stretch/wildcard), specific artists/releases, why each fits, documented listening references, accessible auditions, matching stock if available, and 1–3 feedback questions. Admit unlistened audio. Record reaction after audition.
+Discovery output: session intent, three sections (closest/adjacent/furthest relevant), at least 12 distinct release leads each by default, specific artists/releases, why each fits, documented listening references, accessible auditions, matching stock if available, and 1–3 feedback questions. Admit unlistened audio. Record reaction after audition.
 
 Watch output: check timestamp, sources successfully checked plus failures/limits, target-by-target matches, exact identity constraints, price basis, currentness, lead/qualified status, new alerts, prior alert deduplication, and queued broader web queries. No match means only no match in checked sources.
 
 Site output: broad/niche coverage, retailer URL/location/specialty, why useful, source evidence, destination shipping status/cost, grading/returns, authenticity/identity concerns, stock freshness, usable extraction adapter and next action. Reachable does not mean reputable.
 
 Session handoff: memory revision, confirmed changes, inferred hypotheses, newly owned/ordered records, rejected suggestions and reasons, unresolved identities/market claims, watch/source changes, files to retain. Export a full data ledger even when readable report is batched; report exactly which rows were screened versus deeply verified.
+
+
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.
 
 
 ---
@@ -295,6 +379,11 @@ Memory keeps explicit statements, inferred hypotheses, session moods, recipient 
 Use UTC timestamps in files and user-local timezone for schedules. Output uncertainty, count gaps and unavailable capabilities plainly. A finite tool cannot guarantee exhaustive historical/private inventory, full-internet coverage, universal AI compatibility or all possible future error recovery. Preserve raw inputs and use documented fallback mechanisms. Private memory stays out of public repository/package artifacts.
 
 
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.
+
+
 ---
 
 Source: docs/RECOVERY.md
@@ -342,19 +431,88 @@ State writes use a same-directory temporary file and atomic replacement. A disk-
 Meaningful verification: mock feed limits and errors, strict stock/price handling, variant selection, CSV safety, state lock/backups, feedback reversibility, exact watch constraints, stale/currency gates, alert transitions, and package privacy allowlist. Test a real source after adapter changes. Local tests cannot certify website completeness or market value.
 
 
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.
+
+
+---
+
+Source: docs/RESEARCH-WORKFLOW.md
+
+# Research workflow — 2.1
+
+## Keep the original mission
+
+Broad objective coverage comes first: electronic subgenres, jazz, rock, metal, pop, country, folk/Americana, soul/R&B/funk, hip-hop, blues, reggae/dub/ska, classical, gospel/Christian, regional traditions, soundtracks/library, spoken/non-music and Odd/Experimental. Multiple categories may apply. Personal taste guides the personal/discovery view, not the whole survey. Separate personal lifelong listening, named-recipient gifts, affordable finds, collectible/rarity leads and evidence-backed resale theses. Artist examples are seeds, never an exhaustive filter.
+
+## Do work once, deepen it when a decision needs it
+
+1. Parse the supplied catalog once. Record source, original observation timestamp, exact scope, stock unknowns and pagination failures. Reuse that snapshot across modules. An active CSV cannot reconstruct sold-out inventory.
+2. Use stable source/listing IDs and metadata fingerprints. Compare against the prior research ledger; reuse assessments only for unchanged metadata, with their original evidence dates. A local delta comparison saves processing; it does not magically obtain a retailer delta feed or refresh evidence. Changed price/copy/variant reopens the decision.
+3. Treat overlapping genres as annotations. Route missing identity, bad prices, unresolved styles and condition caveats to an exception queue. Repair high-impact candidate issues first; do not resolve every low-priority metadata gap before presenting useful findings.
+4. Separate stages: mechanically screened → editorial lead → auditioned/recipient-assessed → exact-edition and current-offer checked → market-underwritten where relevant. Full row coverage is not a claim of full musical review. Tool-generated candidates are not curated purchase recommendations.
+5. Create one canonical record/offer card. Refer to it from genre, personal, gift, bargain, exploration and resale views using purpose tags. Different copies/pressings remain separate offers. Avoid repeating long descriptions and all scores in every view.
+6. Verify the candidates that can change a near-term decision first. Stop or route to Watch when exact-edition/grade evidence is inaccessible. Old, overseas, differently graded or unknown accepted-offer sales are context, not interchangeable exact sold comps. Do not search endlessly to fill a score.
+7. Show coverage, meaningful gaps, next verification action and score confidence. Cite claim-specific pages. Avoid decorative thumbnails unless they depict the exact item; a similar album cover can be misleading.
+
+## Scoring remains multi-dimensional
+
+Keep the original L/G/C/A/I/R/V/Q/U definitions in PROTOCOL.md. Scores are independent ordinal 1–5 assessments, not probabilities. Unknown is blank, never zero. C (seller-stated media grade) and A (item-price bracket in the configured currency) are mechanical aids; neither certifies playback quality or landed value. Default A USD brackets: ≤5=5; ≤10=4; ≤20=3; ≤35=2; >35=1. Other currencies need explicit locally configured brackets, not silent FX conversion.
+
+Attach score basis, evidence date and evidence confidence separately. L is personal expected listening value, not general artistic merit; an unauditioned genre match is only a fit hypothesis. G must name the recipient and have a separate assessment for each recipient. I requires a defensible musical/cultural significance argument. R needs exact pressing and current supply evidence; Q needs comparable completed-sale frequency. V needs comparable current market evidence. U (resale underwriting) needs net proceeds after fees, packing, shipping, tax assumptions, condition/return risk and currency effects. Buying urgency is a separate decision field, not U. It needs evidence for both the reason to act and the cost of being wrong; sales velocity estimates need time series, not a single sold-out label.
+
+Never assign a composite investment score merely because a record is cheap or old. Show objective collector merit alongside personal appeal. Maintain contradictory evidence (repress announced, plentiful substitutes, seller stock unknown) next to scarcity claims. No automatic purchases.
+
+## Three exploration tiers
+
+Default: 12 distinct release leads per tier, 36 total; configurable up/down on request. At most two releases per artist per tier by default; avoid duplicate offers and recycle only deliberate reference anchors. Report a quota shortfall instead of adding unrelated stock. Familiar releases can be calibration anchors, but are not automatically new discoveries. Discovery can reach outside this retailer; distinguish audition-only leads from seller-matched offers.
+
+- **1 — Closest:** progressive house, deep/melodic house, ambient/dub techno and Anjunadeep-like territory, based on explicit private taste/history.
+- **2 — Adjacent:** preserve emotional development, atmosphere, texture or hypnotic repetition while shifting rhythm, instrumentation or production language.
+- **3 — Furthest, with a clear connection:** jazz, post-rock, modern/minimal classical, electroacoustic and regional traditions where a specific bridge justifies the suggestion. Any genre can qualify with evidence and a useful explanation.
+
+For each release: artist/title, curatorial connection, what changes, audition entry point, unfamiliarity status, catalog offer if present, snapshot versus current stock status, edition/grade caveats, and next action. Tier placement is an explained curatorial judgment, not a measured distance or proof of fit. A metadata rule does not override explicit exclusions or listening feedback; the AI must check both before recommending.
+
+## History and adaptive feedback
+
+Spotify connector samples are samples unless counts, dates, coverage and meaning are actually returned. Saved tracks, current top affinity and repeated plays are different datasets. The Web API long_term is approximately one year, not a measured 2–3-year history. Use listening_history.py with the account's **Extended Streaming History** JSON for dated multi-year events. Basic one-year history is rejected by this importer. Importing tracks does not supply genre labels; optional sourced track mappings or marked artist proxies report mapped versus unknown listening minutes.
+
+A curious reaction is stage `interested` (weight .25); an explicit listened/owned reaction uses weight 1. Existing v2 feedback without stage retains weight 1 for compatibility. Learning is `(positive_mass − negative_mass)/(total_mass + 3)`, tag-level, subject-specific and reversible. It is a heuristic hypothesis, not trained predictive analytics. Owned status never follows merely from a positive reaction. Avoid learning a genre aversion from surface noise or a bad pressing. Optional short question after audition: what worked — rhythm, texture, emotion, vocals, energy — and what failed? Never force a questionnaire when context already answers it.
+
+## Executable helpers
+
+```sh
+python3 research_engine.py --catalog private/catalog/active.csv --out private/research
+python3 research_engine.py --catalog private/catalog/active.csv --previous private/previous/research-ledger.json --per-tier 12 --out private/research-next
+python3 listening_history.py --input private/spotify-history --from 2023-10-09 --through 2026-10-09 --timezone America/Denver --out private/listening
+python3 vinyl_suite.py memory feedback 'Artist / release' --rating 1 --stage interested --tags 'spacious,transforming' --reason 'Curious; not yet a confirmed favorite'
+```
+
+Keep previous output in a different directory. Research output: canonical research-ledger.json, coverage-ledger.csv, data-issues.csv, exploration-candidates.json, audit-summary.json. Legacy scores remain in JSON for audit; the CSV displays only renewed mechanical C/A and unknown unverified scores. Metadata candidates are a queue for an AI/person, not a final recommendation list. The genre profile is editable and public example data; actual private exclusions/preferences must also be read.
+
+History outputs: listening-profile.json, top-tracks.csv, top-artists.csv. Dates are inclusive in the chosen timezone; rankings use total observed milliseconds, with recorded-event and ≥30-second meaningful-event counts separately. Do not describe these as Spotify's official play counts. Full listening minutes include short/skipped events. Privacy outputs omit IP, username and device fields; raw history stays private. File hashes, time bounds and unknown completeness remain. Windows without timezone database may need timezone support installed; UTC is an honest fallback only with its date-boundary difference disclosed.
+
+## Recovery additions
+
+Unknown/missing timestamps remain unknown on offline imports. Failed/partial watch sources do not reset previous stock observations or create false restock alerts. Fresh complete source absence or fresh explicit sold-out observation can reset an alert; stale snapshots cannot. Watch freshness is currently ≤24 hours and is an operational gate, not a reservation. Migrated v2 watch signatures survive failed checks. Report retailer failures and check final checkout/copy details manually.
+
+For missing history: continue from explicit taste, disclose unmeasured coverage, and request Extended Streaming History only when historical ranking matters. For conflicting genres: preserve multiple tags; do not pick one for convenience. For insufficient exact comps: leave value/resale/urgency unknown and identify what evidence would change the conclusion. For sparse tier stock: offer sourced external audition leads and label them accordingly.
+
+
 ---
 
 Source: prompts/BOOTSTRAP.md
 
 # Paste this to start
 
-Use the attached Adaptive Vinyl Finder toolkit as my portable vinyl research system. Inventory and extract actual attachments if supported. Read README, docs/PROTOCOL.md, INTEROPERABILITY.md, OPERATIONS.md, RECOVERY.md, OUTPUT-FORMAT.md, and the relevant module prompts. If ZIP extraction is unavailable, read AI-Reuse-Manual.md and ask for only the inaccessible required data. Do not claim missing files were read or scripts were run.
+Use the attached Adaptive Vinyl Finder toolkit as my portable vinyl research system. Inventory and extract actual attachments if supported. Read README, docs/PROTOCOL.md, INTEROPERABILITY.md, OPERATIONS.md, RECOVERY.md, OUTPUT-FORMAT.md, RESEARCH-WORKFLOW.md, and the relevant module prompts. If ZIP extraction is unavailable, read AI-Reuse-Manual.md and ask for only the inaccessible required data. Do not claim missing files were read or scripts were run.
 
 My latest explicitly selected memory.json is canonical. Read actual records, schema, revision, subjects, explicit preferences versus hypotheses, collection statuses, watch targets and source registry. Read catalog timestamps, counts, stock fields and coverage; a preview is not a full parse. Preserve my other-chat handoff as sourced context, without narrowing the objective genre survey.
 
 State your available file-reading, Python, web-search/browsing, music/marketplace connector and scheduling capabilities. Run standard-library scripts only where available and authorized; no installation/MCP or always-on monitoring is implied. Use existing appropriate tools, and record access limitations. Any AI provider may follow the text protocol, but missing capabilities need honest fallback.
 
-Route requests: retailer/catalog links → exporter + genre survey; mood/experience → exploration questions and style/artist research; explicit reactions → memory; expensive/unavailable exact releases → watch configuration/check; retailer discovery → Site Finder. Reuse source snapshots and state across modules. Active stock is the default; sold-out/historic research remains separate and only expands when requested. Survey all major categories plus Odd/Experimental before personalization.
+Route requests: retailer/catalog links → exporter + genre survey; mood/experience → exploration questions and style/artist research; explicit reactions → memory; expensive/unavailable exact releases → watch configuration/check; retailer discovery → Site Finder. Reuse source snapshots and state across modules. Run Research Auditor for one canonical coverage ledger and exception queue; compare prior fingerprints rather than repeating unchanged metadata work. Use Listening History for dated multi-year Spotify exports. Exploration defaults to three tiers with 12 releases each. Active stock is the default; sold-out/historic research remains separate and only expands when requested. Survey all major categories plus Odd/Experimental before personalization.
 
 Keep musical significance, personal fit, gifting, affordability, verified market value, exact-edition scarcity and net resale economics separate. Unknown scores remain blank. Verify source claims, live leading stock/price, edition and sold comps appropriately. Do not invent listening, Spotify inventory, sales evidence, predictive models, trained personalization, or internet completeness. No purchases, seller messages or account changes.
 
@@ -371,7 +529,11 @@ Read explicit preferences, feedback hypotheses, collection and current catalog/s
 
 Translate answers into musical attributes: texture, space, rhythm, harmonic color, vocals, complexity, intensity, emotional arc and production era. Use existing available music tools, actual listening references, credible genre/artist sources and web searches. The CLI explore plan is a heuristic starting point, not final artist truth. Mood synonyms, contradictory goals and negative constraints need human/AI interpretation rather than forced tagging.
 
-Offer 3–5 pathways spanning familiar, adjacent, stretch and wildcard styles. Stay open across electronic subgenres, jazz, rock, metal, pop, country, folk, soul/R&B/funk, hip-hop, blues, reggae, classical, regional/world traditions, gospel, soundtrack/library and experimental. For each pathway provide 2–4 artists or exact releases, why they fit, accessible audition references, and relevant available vinyl where possible. Tell me when stock/edition has not been checked and do not claim to have listened to unavailable audio. Include non-buyable discovery leads separately.
+Offer three separate sections of at least 12 distinct release leads each by default: (1) closest to my explicit/current listening baseline, (2) adjacent, (3) furthest away with a clear musical connection. Explain the connection and what changes for each exact release. Default at most two releases per artist per tier; identify calibration anchors I may already know, rather than claiming everything is new. Read RESEARCH-WORKFLOW.md and the editable discovery profile. The catalog routing script supplies provisional metadata candidates only; review musical fit and explicit exclusions. Do not force a quota with irrelevant stock. Use sourced external audition-only leads to fill genuine catalog gaps and label unavailable/unverified offers separately.
+
+Use actual Spotify data where available; report returned counts/date windows/coverage. Never convert a small connector sample into a 2–3-year ranking. For measured history, use listening_history.py and my Extended Streaming History export; keep raw private metadata out of recommendations. Saved-track coverage and measured play history remain separate. Record interesting-but-unauditioned reactions with stage interested, not ownership or an established favorite.
+
+Stay open across electronic subgenres, jazz, rock, metal, pop, country, folk, soul/R&B/funk, hip-hop, blues, reggae, classical, regional/world traditions, gospel, soundtrack/library and experimental. Personal exploration does not narrow objective genre/collector/gift research. For each lead give an audition entry point or primary release link, expected personal-fit hypothesis with its basis, listing if actually matched, and next verification action. Do not claim to have listened to unavailable audio.
 
 Apply the same evidence/scoring discipline. Ask which aspect worked or failed after audition; record precise feedback, adapt the next round and save the session. Keep artistic merit separate from personal affinity. Route unavailable/over-budget desired exact releases to Watch; unexplored sources to Site Finder. Export updated memory and findings.
 
@@ -391,6 +553,19 @@ Default analysis is active-only. Use full JSON for sold-out research when reques
 
 ---
 
+Source: prompts/HISTORY.md
+
+# Listening History
+
+Read my private Extended Streaming History JSON files using listening_history.py. Use the date window and timezone I actually request; show file hashes, observed date bounds, included/excluded events and unknown completeness. Rank tracks/artists by observed listening minutes, with recorded-event and meaningful-event counts separately. Do not call them official Spotify play counts. Basic history or a small connector sample cannot establish a 2–3-year ranking.
+
+Do not export IP, username or device information. Keep raw files private. Genres require source-backed track mappings or explicitly labeled artist proxies; report the mapped listening fraction and unknown minutes. Do not infer styles from titles or silently train a model. Compare dated history with explicit current preferences; current corrections outrank historical frequency. Produce a private listening profile and the three exploration tiers, preserving broad objective record scouting across genres.
+
+If history is unavailable, continue from explicit preferences, disclose the missing measured ranking, and give the official account privacy export route. Save summaries, not unnecessary raw personal metadata, to memory.
+
+
+---
+
 Source: prompts/MEMORY.md
 
 # Memory Matrix
@@ -400,6 +575,17 @@ Use memory.json as portable canonical state; keep a local backup, revisions and 
 Explicit user corrections supersede previous values for the same subject/key. Hypotheses stay labeled inferred and never replace explicit statements. Mood applies to this session unless the user says it is persistent. Record positive/negative feedback with record identity, specific tags and reason; dislike of a pressing's noise does not prove dislike of its genre. Use the CLI's interpretable smoothed tag weights only as provisional clues, not a trained model or probability.
 
 After each meaningful research/audition session, summarize confirmed changes, inferred patterns and unresolved conflicts; write updated memory with audit history and download link if supported. Avoid repetitive questions already answered. Ask a short discriminating question when uncertainty would change the next choice. Collection duplicate suppression and recipient-specific scoring are required before final recommendations. Deactivate mistaken feedback/preferences by ID; restore backups deliberately. Never claim a provider automatically persisted my state across chats.
+
+
+---
+
+Source: prompts/RESEARCH.md
+
+# Research Auditor
+
+Read the full protocol, RESEARCH-WORKFLOW.md and actual private memory. Parse the source once with research_engine.py where executable. Keep original metadata, timestamps and legacy scores; distinguish mechanical screening from editorial review, audition, current edition/offer verification and market underwriting. Use the existing named taxonomy and annotate valid genre overlap rather than treating it as an error. Prioritize actual identity/price/stock blockers.
+
+Compare an existing prior research-ledger.json using --previous to reuse unchanged metadata/evidence without pretending dates refreshed. Maintain one canonical card and purpose-tagged views across all genres and collection/gift/bargain/collector/resale goals. Name each gift recipient. Leave unsourced personal/market scores unknown. Metadata tier candidates require audition and explicit-preference review; external discovery leads remain separate from buyable seller offers. Verify actionable decisions first, log gaps and stop unnecessary comparable searches when exact evidence is unavailable. Export ledgers, evidence and updated memory.
 
 
 ---

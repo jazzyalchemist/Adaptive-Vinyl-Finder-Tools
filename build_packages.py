@@ -6,7 +6,7 @@ from pathlib import Path
 import zipfile
 
 ROOT=Path(__file__).resolve().parent
-TOOLS={'Catalog-Exporter':'catalog_export.py','Memory-Matrix':'memory_matrix.py','Experience-Explorer':'experience_explorer.py','Record-Watchlist':'record_watchlist.py','Site-Finder':'site_finder.py'}
+TOOLS={'Catalog-Exporter':'catalog_export.py','Memory-Matrix':'memory_matrix.py','Experience-Explorer':'experience_explorer.py','Record-Watchlist':'record_watchlist.py','Site-Finder':'site_finder.py','Research-Auditor':'research_engine.py','Listening-History':'listening_history.py'}
 
 def public_files():
     paths=[ROOT/p for p in ['README.md','LICENSE','vinyl_suite.py','build_packages.py','Control-Hub.html','AI-Start-Here.md','AI-Reuse-Manual.md','.gitignore']]
@@ -33,7 +33,7 @@ def package(name, paths):
             start=f'# {name}\n\nStart with `{TOOLS[name]}` and its `--help`. This package includes the complete shared system so modules interoperate. Use one private memory path across modules. Read README and AI-Start-Here.md before AI use.\n'
             z.writestr('START-THIS-MODULE.md',start)
             manifest['START-THIS-MODULE.md']=hashlib.sha256(start.encode()).hexdigest()
-        z.writestr('PACKAGE-MANIFEST.json',json.dumps({'version':'2.0.0','sha256':manifest},indent=2))
+        z.writestr('PACKAGE-MANIFEST.json',json.dumps({'version':'2.1.0','sha256':manifest},indent=2))
 
 def main():
     manual(); paths=public_files()

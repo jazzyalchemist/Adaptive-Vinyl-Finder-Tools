@@ -39,3 +39,8 @@ Known failure paths and checks are below. No finite document can guarantee recov
 State writes use a same-directory temporary file and atomic replacement. A disk-full/permissions failure may prevent backup/export; retain existing files and repair storage before retrying. The CLI returns exit 2 for handled validation/input errors; unexpected exceptions are not converted into a success.
 
 Meaningful verification: mock feed limits and errors, strict stock/price handling, variant selection, CSV safety, state lock/backups, feedback reversibility, exact watch constraints, stale/currency gates, alert transitions, and package privacy allowlist. Test a real source after adapter changes. Local tests cannot certify website completeness or market value.
+
+
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.

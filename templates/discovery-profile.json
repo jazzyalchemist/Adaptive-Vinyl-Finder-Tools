@@ -1,0 +1,33 @@
+{
+  "basis": "Example user-declared progressive/deep-house/ambient-techno baseline, not measured Spotify listening history. Customize from private preferences and actual history.",
+  "max_per_artist": 2,
+  "tiers": [
+    {
+      "id": 1,
+      "name": "Closest to current listening",
+      "connection": "Progressive house, deep/melodic house, ambient techno and Anjunadeep-like atmosphere",
+      "difference": "New releases, mixes, artists and labels within familiar rhythmic and emotional territory",
+      "style_patterns": ["Progressive House", "Deep House", "Melodic House", "Ambient Techno", "Dub Techno", "Progressive Trance"],
+      "label_patterns": ["^Anjunadeep$", "^Anjunabeats$", "^This Never Happened$", "^Lost & Found", "^Global Underground"],
+      "artist_examples": ["Guy J", "Jody Wisternoff", "James Grant", "Lane 8", "Yotto", "Marsh", "Ben Böhmer", "Spencer Brown", "Dosem"]
+    },
+    {
+      "id": 2,
+      "name": "Adjacent exploration",
+      "connection": "Atmosphere, emotional development and texture remain; rhythm or production language shifts",
+      "difference": "Ambient/electronic hybrids, IDM, leftfield downtempo, organic grooves and processed guitar",
+      "style_patterns": ["Ambient", "IDM", "Downtempo", "Leftfield", "Trip Hop", "Future Jazz", "Broken Beat", "Balearic"],
+      "label_patterns": ["^Houndstooth$", "^NNA Tapes$"],
+      "artist_examples": ["Rachika Nayar", "Hinako Omori", "The Future Sound Of London", "Four Tet", "Vangelis", "Ralph Lundsten", "Jean-Michel Jarre"]
+    },
+    {
+      "id": 3,
+      "name": "Furthest away, with a clear connection",
+      "connection": "Spaciousness, gradual transformation, expressive intensity, unusual timbre or a compositional journey",
+      "difference": "Spiritual/modal/free jazz, post-rock, minimal/contemporary classical, electroacoustic and regional traditions",
+      "style_patterns": ["Spiritual Jazz", "Modal", "Free Jazz", "Free Improvisation", "Post-Rock", "^Minimal$", "^Contemporary$", "Modern Classical", "Musique Concr", "Field Recording", "Avant-garde", "Impressionist", "Gamelan"],
+      "label_patterns": [],
+      "artist_examples": ["Egberto Gismonti", "Patrick Shiroishi", "Rob Mazurek", "David Friesen", "Erik Satie", "Tortoise", "Karlheinz Stockhausen"]
+    }
+  ]
+}

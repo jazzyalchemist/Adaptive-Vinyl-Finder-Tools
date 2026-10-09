@@ -48,3 +48,8 @@ The preceding full v1 research method is preserved. The five-module v2 toolkit e
 Memory keeps explicit statements, inferred hypotheses, session moods, recipient subjects, collection statuses, evidence, source registry and watch constraints separate. Changes are auditable and reversible. Adaptation uses interpretable feedback weights, not a trained model. Exploration may introduce any genre and should use auditions and specific reactions. Site Finder uses actual available search/browsing tools; the local query generator does not perform internet search. Watch checks run only when invoked or scheduled in a configured environment; price ceilings, condition, currentness, currency and exact edition constraints matter.
 
 Use UTC timestamps in files and user-local timezone for schedules. Output uncertainty, count gaps and unavailable capabilities plainly. A finite tool cannot guarantee exhaustive historical/private inventory, full-internet coverage, universal AI compatibility or all possible future error recovery. Preserve raw inputs and use documented fallback mechanisms. Private memory stays out of public repository/package artifacts.
+
+
+## Version 2.1 extension
+
+Read [RESEARCH-WORKFLOW.md](RESEARCH-WORKFLOW.md) for the canonical staged research process, three-tier exploration, two additional helper CLIs, source/history limitations, curiosity feedback weighting and failed-source watch recovery. This extension supersedes conflicting earlier exploration-size defaults; the original mission and score definitions remain.
